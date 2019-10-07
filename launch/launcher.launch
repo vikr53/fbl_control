@@ -2,5 +2,4 @@
     <node pkg="moving_base" type="pyserial_node.py" name="serial" />
     <node pkg="moving_base" type="pid.py" name="pid" />
     <node pkg="fbl_control" type="controller" name="controller"/>
-    <rosparam param="setpts"> [0.0,2.0,2.0] </rosparam> 
 </launch>

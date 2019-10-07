@@ -21,15 +21,41 @@ int main(int argc, char **argv)
 	while (ros::ok())
   	{
   		// Circle Trajectory
-  		double x_d = 1 * cos(t);
-  		double y_d = 1 * sin(t);
+  		if (t < 3.14) {
+  			double x_d = 1 * cos(t);
+  			double y_d = 1 * sin(t);
+  			double theta_d = 0;
+
+  			double vx_d = -1 * sin(t);
+  			double vy_d = 1 * cos(t);
+  			double w_d = 0;
+
+  			msg.setx = {x_d, y_d, theta_d, vx_d, vy_d, w_d}; 
+  		} else {
+  			double t_tmp = 3.14;
+  			double x_d = 1 * cos(t_tmp);
+  			double y_d = 1 * sin(t_tmp);
+  			double theta_d = 0;
+
+  			double vx_d = 0;
+  			double vy_d = 0;
+  			double w_d = 0;
+
+  			msg.setx = {x_d, y_d, theta_d, vx_d, vy_d, w_d};
+
+  		}
+  		
+
+  		/*Y=0.5 Trajectory
+  		double x_d = 0.5;
+  		double y_d = 0;
   		double theta_d = 0;
 
-  		double vx_d = -1 * sin(t);
-  		double vy_d = 1 * cos(t);
+  		double vx_d = 0;
+  		double vy_d = 0;
   		double w_d = 0;
 
-  		msg.setx = {x_d, y_d, theta_d, vx_d, vy_d, w_d};
+  		msg.setx = {x_d, y_d, theta_d, vx_d, vy_d, w_d};*/
 
 	    setpt_pub.publish(msg);
 

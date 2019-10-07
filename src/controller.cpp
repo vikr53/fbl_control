@@ -84,7 +84,7 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     // Calculate del_x
     for (int i=0; i<num_states; i++)
     {
-        max_del_x(i) = abs(setpt(i)-x(i));
+        max_del_x(i) = abs(setpt(i));
         del_x(i) = setpt(i)-x(i); 
         if(max_del_x(i) == 0) {
             zc = zc + 1;
@@ -96,7 +96,7 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     if(zc >= 3) {
         k_p = 0.1;
     } else {
-        k_p = sqrt((r*drive_max)/((pow(0.5*max_del_x(2)+max_del_x(0),2)+pow(0.5*max_del_x(2)+max_del_x(1),2))));
+        k_p = sqrt(pow((r*drive_max),2)/((pow(0.5*max_del_x(2)+max_del_x(0),2)+pow(0.5*max_del_x(2)+max_del_x(1),2))));
     }
     
     std::cout<<"k_p"<<k_p;
@@ -231,9 +231,4 @@ void initial_error_check(const fbl_control::plant_msg& msg)
             ros::shutdown();
         };
 
-    if ( msg.setpoint.size() != num_states )
-    {
-        ROS_ERROR("The published setpoint's length does not equal # of states. Check the data which is published by the plant.");
-        ros::shutdown();
-    }
 }
