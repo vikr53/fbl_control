@@ -11,12 +11,6 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "swerve_plant");
     
   ros::NodeHandle plant_node;
-  plant_node.getParam("/setpts", setpoint);
-  /*
-  if (plant_node.getParam("/setpts", setpoint))
-  {
-      ROS_INFO("Got Params");
-  }*/
 
   // Declare a new message variable
   fbl_control::plant_msg  msg;
@@ -24,9 +18,12 @@ int main(int argc, char **argv)
   // Initial conditions -- these were defined in the header file
   for (int i=0; i<num_states; i++)
   {
-    ROS_INFO("Setting initial Conditions");
+    ROS_INFO("Setting initial state Conditions");
     msg.x[i] = x_IC[i];
-    msg.setpoint[i] = setpoint[i];
+  }
+  for (int i=0; i<6; i++) {
+    ROS_INFO("Setting initial setpt Conditions");
+    msg.setpoint[i] = setpt[i];
   }
 
   msg.t = t_IC;
@@ -36,7 +33,10 @@ int main(int argc, char **argv)
   ros::Publisher chatter_pub = plant_node.advertise<fbl_control::plant_msg>("state", 1);
 
   // Subscribe to "control_effort" topic to get a controller_msg.msg
-  ros::Subscriber sub = plant_node.subscribe("control_effort", 1, chatterCallback );
+  ros::Subscriber sub1 = plant_node.subscribe("control_effort", 1, chatterCallback );
+
+  // Subscribe to "setpt" topic to get a controller_msg.msg
+  ros::Subscriber sub2 = plant_node.subscribe("setpt", 1, setptCallback );
   
   ROS_INFO("Checkpoint 3");
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
   return 0;
 }
 
-// Callback when something is published on 'control_effort'
+// Callback 'control_effort' topic
 void chatterCallback(const fbl_control::controller_msg& u_msg)
 {
   //ROS_INFO("I heard: [%f]", u_msg.u[0]);
@@ -85,4 +85,15 @@ void chatterCallback(const fbl_control::controller_msg& u_msg)
   u[0] = u_msg.u[0];
   u[1] = u_msg.u[1];
   u[2] = u_msg.u[2];
+}
+
+// Callback for 'setpt' topic
+void setptCallback(const fbl_control::setpt_msg& setpt_msg)
+{
+  //ROS_INFO("I heard: [%f]", u_msg.u[0]);
+
+  // Define the stabilizing control effort
+  setpt[0] = setpt_msg.setx[0];
+  setpt[1] = setpt_msg.setx[1];
+  setpt[2] = setpt_msg.setx[2];
 }

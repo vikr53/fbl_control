@@ -1,0 +1,10 @@
+#include <math.h>
+#include "ros/ros.h"
+
+// Header for 'setpt_msg.msg'
+#include "fbl_control/setpt_msg.h"
+
+/////////////////////////////////////////////
+// Functions
+/////////////////////////////////////////////
+

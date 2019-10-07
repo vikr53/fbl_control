@@ -58,7 +58,10 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     for (int i=0; i<num_states; i++)
     {
         x(i)=msg.x[i];
-        setpoint(i) = msg.setpoint[i];
+    }
+    for (int i=0; i<6; i++)
+    {
+        setpt(i) = msg.setpoint[i];
     }
     
     double k_p = 0.0;
@@ -68,6 +71,7 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     Eigen::Vector3d del_x;
     Eigen::Vector3d max_del_x;
     Eigen::Vector3d u_tilda;
+    Eigen::Vector3d vel_d;
 	
     Eigen::Matrix3d G;
     double a =  -(W/2)*sin(x(2))+(L/2)*cos(x(2));
@@ -76,18 +80,34 @@ void chatterCallback(const fbl_control::plant_msg& msg)
  0, 1, b,
  0, 0, 1;
     invG = G.inverse();
+    int zc = 0;
     // Calculate del_x
-    for (int i=0; i<num_states; i++) {
-        max_del_x(i) = abs(setpoint(i));
-	del_x(i) = setpoint(i)-x(i); 
+    for (int i=0; i<num_states; i++)
+    {
+        max_del_x(i) = abs(setpt(i)-x(i));
+        del_x(i) = setpt(i)-x(i); 
+        if(max_del_x(i) == 0) {
+            zc = zc + 1;
+        }
     }
+
     ROS_INFO("CALCULATED DEL_X");
     // Calcule k_d desired
-    k_p = sqrt((r*drive_max)/((pow(0.5*max_del_x(2)+max_del_x(0),2)+pow(0.5*max_del_x(2)+max_del_x(1),2))));
+    if(zc >= 3) {
+        k_p = 0.1;
+    } else {
+        k_p = sqrt((r*drive_max)/((pow(0.5*max_del_x(2)+max_del_x(0),2)+pow(0.5*max_del_x(2)+max_del_x(1),2))));
+    }
+    
     std::cout<<"k_p"<<k_p;
     // Calculate u
     u_tilda = k_p*del_x;
-    u = invG*u_tilda;
+
+    for(int i=0; i<3; i++) {
+        vel_d(i) = setpt(i+3);
+    }
+
+    u = invG*(u_tilda+vel_d);
     ROS_INFO("FINISHED U CALC");
     /*Calculate G
     boost::numeric::ublas::matrix<double> G (num_inputs, num_states);

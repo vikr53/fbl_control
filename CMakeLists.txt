@@ -56,6 +56,7 @@ add_message_files(
    FILES
    plant_msg.msg
    controller_msg.msg
+   setpt_msg.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -106,17 +107,20 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## Declare a cpp executable
 add_executable(controller src/controller.cpp)
 add_executable(swerve_steer_plant src/swerve_steer_plant.cpp)
+add_executable(setpt_gen src/setpt_gen.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 #add_dependencies(controller fbl_control_generate_messages_cpp)
 add_dependencies(controller fbl_control_generate_messages_cpp)
 add_dependencies(swerve_steer_plant fbl_control_generate_messages_cpp)
+add_dependencies(setpt_gen fbl_control_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 #target_link_libraries(controller ${catkin_LIBRARIES})
 target_link_libraries(controller ${catkin_LIBRARIES})
 target_link_libraries(swerve_steer_plant ${catkin_LIBRARIES})
+target_link_libraries(setpt_gen ${catkin_LIBRARIES})
 
 #############
 ## Install ##

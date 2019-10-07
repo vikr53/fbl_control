@@ -29,7 +29,9 @@ const static int num_inputs = u_msg.u.size();
 double prev_x [3] = { };
 
 Eigen::Vector3d x;
-Eigen::Vector3d setpoint;
 Eigen::Vector3d u;
+
+typedef Eigen::Matrix<double, 6, 1> Vector6d;
+Vector6d setpt;
 
 std_msgs::Float32MultiArray motor_dat;

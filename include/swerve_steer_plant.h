@@ -7,6 +7,9 @@
 // Header for controller_msg.msg
 #include "fbl_control/controller_msg.h"
 
+// Header for setpt_msg.msg
+#include "fbl_control/setpt_msg.h"
+
 /////////////////////////////////////////////
 // Variables -- Make changes here.
 /////////////////////////////////////////////
@@ -27,6 +30,7 @@ double delta_t = 0.01; // control period in seconds
 
 // Global so it can be passed from the callback fxn to main
 static double u[num_inputs] = {0};
+static double setpt[6] = {0};
 
 
 /////////////////////////////////////////////
@@ -34,3 +38,4 @@ static double u[num_inputs] = {0};
 /////////////////////////////////////////////
 
 void chatterCallback(const fbl_control::controller_msg& u_msg);
+void setptCallback(const fbl_control::setpt_msg& setpt_msg);
