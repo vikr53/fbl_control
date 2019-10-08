@@ -172,16 +172,20 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     // Assume no slip
     double wheel_radius = 0.1016; // (meters)
     double des_steer[4];
-    des_steer[0] = atan2(u(1),u(0))-x(2)-(3.14159265/2.0);
+    //des_steer[0] = atan2(u(1),u(0))-x(2)-(3.14159265/2.0);
+    des_steer[0] = atan2(u(1),u(0))-x(2);
     double drive_speed_e1 = (sqrt( pow(u(0),2) + pow(u(1),2) )) / wheel_radius;
 
-    des_steer[1] = atan2(ye2_dot,xe2_dot)-x(2)-(3.14159265/2.0);
+    //des_steer[1] = atan2(ye2_dot,xe2_dot)-x(2)-(3.14159265/2.0);
+    des_steer[1] = atan2(ye2_dot,xe2_dot)-x(2);
     double drive_speed_e2 = (sqrt( pow(xe2_dot,2) + pow(ye2_dot,2) )) / wheel_radius;
 
-    des_steer[2] = atan2(ye3_dot,xe3_dot)-x(2)-(3.14159265/2.0);
+    //des_steer[2] = atan2(ye3_dot,xe3_dot)-x(2)-(3.14159265/2.0);
+    des_steer[2] = atan2(ye3_dot,xe3_dot)-x(2);
     double drive_speed_e3 = (sqrt( pow(xe3_dot,2) + pow(ye3_dot,2) )) / wheel_radius;
 
-    des_steer[3] = atan2(ye4_dot,xe4_dot)-x(2)-(3.14159265/2.0);
+    //des_steer[3] = atan2(ye4_dot,xe4_dot)-x(2)-(3.14159265/2.0);
+    des_steer[3] = atan2(ye4_dot,xe4_dot)-x(2);
     double drive_speed_e4 = (sqrt( pow(xe4_dot,2) + pow(ye4_dot,2) )) / wheel_radius;
 
     // Fix negatives
@@ -236,6 +240,6 @@ void initial_error_check(const fbl_control::plant_msg& msg)
         {
             ROS_ERROR("The 'low saturation limit' is higher than 'high saturation limit.' Change them in controller_parameters.h.");
             ros::shutdown();
-        };
+        }; 
 
 }

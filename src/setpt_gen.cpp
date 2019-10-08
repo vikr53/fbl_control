@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "setpt_gen");
 
 	ros::NodeHandle setpt_node;
-
+  ros::Duration(3).sleep();
 	// Declare a new message variable
 	fbl_control::setpt_msg  msg;
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   		int c = 0;
 
   		if (t_i <= t && t < t_1) {
-  			double m = 1/(t_1-t_i);
+  			double m = 0.1/(t_1-t_i);
   			S = m*t;
   		} else if (t_1 <= t && t < t_2) {
   			S = 1;
