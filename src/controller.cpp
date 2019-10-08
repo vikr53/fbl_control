@@ -28,14 +28,21 @@ int main(int argc, char **argv)
     {
         motor_dat.data.push_back(0.0);
     }
+
+    double delta_t = 0.01;
+
+    ros::Rate loop_rate(1/delta_t);
+
     // Main loop
     while (ros::ok())
     {
-        ros::spinOnce();
 
         // Publish the stabilizing control effort
         control_tower.publish(motor_dat);
         chatter_pub.publish(u_msg);
+
+        ros::spinOnce();
+        loop_rate.sleep();
     }
 
     return 0;
@@ -101,7 +108,7 @@ void chatterCallback(const fbl_control::plant_msg& msg)
     
     std::cout<<"k_p"<<k_p;
     // Calculate u
-    u_tilda = k_p*del_x;
+    u_tilda = 4*del_x;
 
     for(int i=0; i<3; i++) {
         vel_d(i) = setpt(i+3);
